@@ -53,6 +53,8 @@ public class HomeActivity extends AppCompatActivity
         folioReader = FolioReader.get()
                 .setOnHighlightListener(this)
                 .setReadLocatorListener(this)
+                .setLinkPurchase("test")
+                .setStatusTooltip("")
                 .setOnClosedListener(this);
 
         getHighlightsAndSave();
@@ -65,9 +67,8 @@ public class HomeActivity extends AppCompatActivity
                 if (config == null)
                     config = new Config();
                 config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
-
                 folioReader.setConfig(config, true)
-                        .openBook(R.raw.accessible_epub_3);
+                        .openBook(R.raw.accessible_epub_3, "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
             }
         });
 
@@ -80,17 +81,25 @@ public class HomeActivity extends AppCompatActivity
                 Config config = AppUtil.getSavedConfig(getApplicationContext());
                 if (config == null)
                     config = new Config();
-                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
+                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL).setDirection(Config.Direction.HORIZONTAL);
 
                 folioReader.setReadLocator(readLocator);
                 folioReader.setConfig(config, true)
-                        .openBook("file:///android_asset/TheSilverChair.epub");
-            }
+                        // .openBook("file:///android_asset/test.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/thuat-quan-tri1594890454.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        .openBook("file:///android_asset/Sachvuicom-chieu-bai-quan-ly-vang-cua-bill-gates-thuong-mo.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/7-nguyen-tac-bat-bien-de-xay-dung-doanh-nghiep-nho1594352236.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/90-ngay-dau-tien-lam-sep1594605101.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/Sachvui.Com-7-nguyen-tac-bat-bien-de-xay-dung-doanh-nghiep-nho-steven-s-little.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/cau-tra-loi-cua-nguoi-chien-thang1594106425.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/cach-tao-ra-nhung-san-pham-truong-ton1594087188.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/aaa.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                        // .openBook("file:///android_asset/thay-doi-1-cach-lanh-dao-09031593159744.epub", "https://mkyong.com/java/jackson-2-convert-java-object-to-from-json/");
+                                    }
         });
     }
 
     private ReadLocator getLastReadLocator() {
-
         String jsonString = loadAssetTextAsString("Locators/LastReadLocators/last_read_locator_1.json");
         return ReadLocator.fromJson(jsonString);
     }

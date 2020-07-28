@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="@string/edit_notes"
+            android:text="Lưu ghi chú"
             android:textSize="23sp" />
 
         <EditText
@@ -40,10 +40,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_note"
             android:layout_marginTop="8dp"
-            android:text="@string/save_note"
-            android:textColor="@android:color/white"
             android:background="@color/default_theme_accent_color"
+            android:text="Lưu"
             android:textAllCaps="false"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
     </RelativeLayout>
 </RelativeLayout>

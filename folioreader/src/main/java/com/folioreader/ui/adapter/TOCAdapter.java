@@ -14,6 +14,7 @@ import com.folioreader.Config;
 import com.folioreader.R;
 import com.folioreader.model.TOCLinkWrapper;
 import com.folioreader.util.MultiLevelExpIndListAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -119,7 +120,7 @@ public class TOCAdapter extends MultiLevelExpIndListAdapter {
 
     public interface TOCCallback {
         void onTocClicked(int position);
-
+        
         void onExpanded(int position);
     }
 

@@ -20,6 +20,8 @@ import com.folioreader.ui.adapter.TOCAdapter;
 import com.folioreader.util.AppUtil;
 import org.readium.r2.shared.Link;
 import org.readium.r2.shared.Publication;
+import com.folioreader.FolioReader;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +37,13 @@ public class TableOfContentFragment extends Fragment implements TOCAdapter.TOCCa
     private Publication publication;
 
     public static TableOfContentFragment newInstance(Publication publication,
-                                                     String selectedChapterHref, String bookTitle) {
+                                                     String selectedChapterHref, String bookTitle, String bookLink) {
         TableOfContentFragment tableOfContentFragment = new TableOfContentFragment();
         Bundle args = new Bundle();
         args.putSerializable(PUBLICATION, publication);
         args.putString(SELECTED_CHAPTER_POSITION, selectedChapterHref);
         args.putString(BOOK_TITLE, bookTitle);
+        args.putString(FolioReader.EXTRA_LINK, bookLink);
         tableOfContentFragment.setArguments(args);
         return tableOfContentFragment;
     }
@@ -144,6 +147,7 @@ public class TableOfContentFragment extends Fragment implements TOCAdapter.TOCCa
 
     @Override
     public void onTocClicked(int position) {
+        
         TOCLinkWrapper tocLinkWrapper = (TOCLinkWrapper) mTOCAdapter.getItemAt(position);
         Intent intent = new Intent();
         intent.putExtra(SELECTED_CHAPTER_POSITION, tocLinkWrapper.getTocLink().getHref());

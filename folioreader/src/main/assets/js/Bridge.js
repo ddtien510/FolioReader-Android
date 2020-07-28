@@ -850,7 +850,24 @@ function computeLastReadCfi() {
 
     cfi = EPUBcfi.Generator.generateCompleteCFI("/0!", cfi);
     viewportRect = null;
-    FolioPageFragment.storeLastReadCfi(cfi);
+    FolioPageFragment.storeLastReadCfi(cfi, false);
+}
+
+function computeLastReadCfi2() {
+
+    viewportRect = constructDOMRect(FolioWebView.getViewportRect(DisplayUnit.CSS_PX));
+    var node = getFirstVisibleNode(document.body) || document.body;
+
+    var cfi;
+    if (node.nodeType === Node.TEXT_NODE) {
+        cfi = EPUBcfi.Generator.generateCharacterOffsetCFIComponent(node, 0);
+    } else {
+        cfi = EPUBcfi.Generator.generateElementCFIComponent(node);
+    }
+
+    cfi = EPUBcfi.Generator.generateCompleteCFI("/0!", cfi);
+    viewportRect = null;
+    FolioPageFragment.storeLastReadCfi(cfi, true);
 }
 
 function constructDOMRect(rectJsonString) {

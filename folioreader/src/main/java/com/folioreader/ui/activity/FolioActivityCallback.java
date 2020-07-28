@@ -11,6 +11,10 @@ public interface FolioActivityCallback {
 
     int getCurrentChapterIndex();
 
+    String getTooltipStep();
+
+    void setTooltipStep();
+
     ReadLocator getEntryReadLocator();
 
     boolean goToChapter(String href);
@@ -22,6 +26,8 @@ public interface FolioActivityCallback {
     void storeLastReadLocator(ReadLocator lastReadLocator);
 
     void toggleSystemUI();
+
+    void hideSystemUI();
 
     void setDayMode();
 
@@ -36,4 +42,7 @@ public interface FolioActivityCallback {
     WeakReference<FolioActivity> getActivity();
 
     String getStreamerUrl();
+    String getTooltipStatus();
+
+    void setTooltipStatus();
 }

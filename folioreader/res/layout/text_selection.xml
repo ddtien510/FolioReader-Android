@@ -30,21 +30,21 @@
                     style="@style/TextViewTextSelector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/copy" />
+                    android:text="Sao chép" />
 
                 <TextView
                     android:id="@+id/shareSelection"
                     style="@style/TextViewTextSelector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/share" />
+                    android:text="Chia sẻ" />
 
                 <TextView
                     android:id="@+id/defineSelection"
                     style="@style/TextViewTextSelector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/define" />
+                    android:text="Định nghĩa" />
 
             </LinearLayout>
 

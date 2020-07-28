@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.folioreader.ui.activity.FolioActivity"
     tools:menu="@menu/menu_main">
-
     <com.folioreader.ui.view.DirectionalViewpager
         android:id="@+id/folioPageViewPager"
         android:layout_width="0dp"
@@ -25,14 +24,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+ 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp" />
+            app:contentInsetStartWithNavigation="0dp">
+                <ImageView
+                    android:id="@+id/btn_home"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_back_24h" 
+                    android:layout_width="40dp"
+                    android:layout_height="39dp"
+                    android:scaleType="fitXY"
+                />
+        </androidx.appcompat.widget.Toolbar>
 
     </com.folioreader.ui.view.FolioAppBarLayout>
 

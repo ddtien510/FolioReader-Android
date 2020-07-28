@@ -114,6 +114,7 @@ class FolioWebView : WebView {
     val webViewHeight: Int
         get() = this.measuredHeight
 
+    var isReachEnd: Boolean = false
     private enum class LastScrollType {
         USER, PROGRAMMATIC
     }
@@ -190,7 +191,7 @@ class FolioWebView : WebView {
 
     @JavascriptInterface
     fun dismissPopupWindow(): Boolean {
-        Log.d(LOG_TAG, "-> dismissPopupWindow -> " + parentFragment.spineItem?.href)
+        // Log.d(LOG_TAG, "-> dismissPopupWindow -> " + parentFragment.spineItem?.href)
         val wasShowing = popupWindow.isShowing
         if (Looper.getMainLooper().thread == Thread.currentThread()) {
             popupWindow.dismiss()
@@ -205,7 +206,7 @@ class FolioWebView : WebView {
 
     override fun destroy() {
         super.destroy()
-        Log.d(LOG_TAG, "-> destroy")
+        // Log.d(LOG_TAG, "-> destroy")
         dismissPopupWindow()
         destroyed = true
     }
@@ -313,20 +314,20 @@ class FolioWebView : WebView {
 
         when (id) {
             R.id.copySelection -> {
-                Log.v(LOG_TAG, "-> onTextSelectionItemClicked -> copySelection -> $selectedText")
+                // Log.v(LOG_TAG, "-> onTextSelectionItemClicked -> copySelection -> $selectedText")
                 UiUtil.copyToClipboard(context, selectedText)
                 Toast.makeText(context, context.getString(R.string.copied), Toast.LENGTH_SHORT).show()
             }
             R.id.shareSelection -> {
-                Log.v(LOG_TAG, "-> onTextSelectionItemClicked -> shareSelection -> $selectedText")
+                // Log.v(LOG_TAG, "-> onTextSelectionItemClicked -> shareSelection -> $selectedText")
                 UiUtil.share(context, selectedText)
             }
             R.id.defineSelection -> {
-                Log.v(LOG_TAG, "-> onTextSelectionItemClicked -> defineSelection -> $selectedText")
+                // Log.v(LOG_TAG, "-> onTextSelectionItemClicked -> defineSelection -> $selectedText")
                 uiHandler.post { showDictDialog(selectedText) }
             }
             else -> {
-                Log.w(LOG_TAG, "-> onTextSelectionItemClicked -> unknown id = $id")
+                // Log.w(LOG_TAG, "-> onTextSelectionItemClicked -> unknown id = $id")
             }
         }
     }
@@ -346,7 +347,7 @@ class FolioWebView : WebView {
 
     @JavascriptInterface
     fun deleteThisHighlight(id: String?) {
-        Log.d(LOG_TAG, "-> deleteThisHighlight")
+        // Log.d(LOG_TAG, "-> deleteThisHighlight")
 
         if (id.isNullOrEmpty())
             return
@@ -456,6 +457,7 @@ class FolioWebView : WebView {
         }
 
         lastScrollType = null
+        this.isReachEnd = (scrollY - contentHeight) >= 10
     }
 
     interface ScrollListener {
@@ -469,12 +471,12 @@ class FolioWebView : WebView {
     private inner class TextSelectionCb : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Log.d(LOG_TAG, "-> onCreateActionMode")
+            // Log.d(LOG_TAG, "-> onCreateActionMode")
             return true
         }
 
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Log.d(LOG_TAG, "-> onPrepareActionMode")
+            // Log.d(LOG_TAG, "-> onPrepareActionMode")
 
             evaluateJavascript("javascript:getSelectionRect()") { value ->
                 val rectJson = JSONObject(value)
@@ -487,7 +489,7 @@ class FolioWebView : WebView {
         }
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            Log.d(LOG_TAG, "-> onActionItemClicked")
+            // Log.d(LOG_TAG, "-> onActionItemClicked")
             return false
         }
 

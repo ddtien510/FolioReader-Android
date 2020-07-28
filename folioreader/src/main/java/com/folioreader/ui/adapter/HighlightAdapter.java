@@ -15,6 +15,7 @@ import com.folioreader.model.HighlightImpl;
 import com.folioreader.ui.view.UnderlinedTextView;
 import com.folioreader.util.AppUtil;
 import com.folioreader.util.UiUtil;
+import android.util.Log;
 
 import java.util.List;
 

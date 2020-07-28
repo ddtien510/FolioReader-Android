@@ -23,7 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+        
             <ImageView
                 android:id="@+id/btn_close"
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/contents"
+                    android:text="Nội dung"
                     android:textSize="16sp" />
 
                 <TextView
@@ -60,7 +60,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/highlights"
+                    android:text="Ghi chú"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -77,5 +77,24 @@
         android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar" />
+        android:layout_below="@id/toolbar" 
+        android:layout_marginBottom="50dp"
+        />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/purchase_wrap"
+        >
+                 <Button
+                    android:id="@+id/btn_purchase"
+                    android:layout_alignParentBottom="true" 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="Mua sách"
+                    android:background="#fb9512"
+                    android:textColor="@color/white"
+                />
+</RelativeLayout>    
 </RelativeLayout>

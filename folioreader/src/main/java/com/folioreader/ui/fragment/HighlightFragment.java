@@ -40,7 +40,7 @@ public class HighlightFragment extends Fragment implements HighlightAdapter.High
     public static HighlightFragment newInstance(String bookId, String epubTitle) {
         HighlightFragment highlightFragment = new HighlightFragment();
         Bundle args = new Bundle();
-        args.putString(FolioReader.EXTRA_BOOK_ID, bookId);
+        // args.putString(FolioReader.EXTRA_BOOK_ID, bookId);
         args.putString(Constants.BOOK_TITLE, epubTitle);
         highlightFragment.setArguments(args);
         return highlightFragment;

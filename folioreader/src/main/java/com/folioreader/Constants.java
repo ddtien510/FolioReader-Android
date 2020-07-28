@@ -12,9 +12,11 @@ public class Constants {
     public static final String CHAPTER_SELECTED = "chapter_selected";
     public static final String HIGHLIGHT_SELECTED = "highlight_selected";
     public static final String BOOK_TITLE = "book_title";
+    public static final String BOOK_LINK = "book_title";
 
     public static final String LOCALHOST = "http://127.0.0.1";
     public static final int DEFAULT_PORT_NUMBER = 8080;
+    public static final int DEFAULT_PORT_NUMBER2 = 8080;
     public static final String STREAMER_URL_TEMPLATE = "%s:%d/%s/";
     public static final String DEFAULT_STREAMER_URL = LOCALHOST + ":" + DEFAULT_PORT_NUMBER + "/";
 

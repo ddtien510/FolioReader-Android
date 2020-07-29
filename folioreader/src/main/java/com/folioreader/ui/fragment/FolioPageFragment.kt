@@ -500,7 +500,6 @@ class FolioPageFragment : Fragment(),
 
         mWebview!!.settings.defaultTextEncodingName = "utf-8"
         HtmlTask(this).execute(chapterUrl.toString())
-        mActivityCallback!!.hideSystemUI()
     }
 
     private val webViewClient = object : WebViewClient() {
@@ -605,7 +604,7 @@ class FolioPageFragment : Fragment(),
                 }
             }
 
-
+            mActivityCallback!!.hideSystemUI()
             Log.d("length", mActivityCallback!!.currentChapterIndex.toString())
 
         }

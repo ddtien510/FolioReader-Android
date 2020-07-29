@@ -207,7 +207,12 @@ html.nightMode {
     background-color: #131313 !important;
 }
 
-.nightMode p, .nightMode div, .nightMode a, .nightMode span  {
+html.nightMode p, html.nightMode div, html.nightMode a, html.nightMode span, html.nightMode div span, html.nightMode div div span, html.nightMode div div div span  {
+    color: #f2f2f2 !important;
+    background-color: transparent !important;
+}
+
+html.nightMode p, html.nightMode div, html.nightMode a, html.nightMode *, html.nightMode div *, html.nightMode div div *, html.nightMode div div div *  {
     color: #f2f2f2 !important;
     background-color: transparent !important;
 }
@@ -237,7 +242,7 @@ html.nightMode .highlight_underline {border-bottom: 2px solid rgba(240, 40, 20, 
 
 @font-face {
     font-family: 'lato';
-    src: url('file:///android_asset/fonts/roboto/Roboto-Regular.ttf');
+    src: local('Roboto Regular'), url('file:///android_asset/fonts/roboto/Roboto-Regular.ttf');
 }
 
 @font-face {
@@ -247,7 +252,7 @@ html.nightMode .highlight_underline {border-bottom: 2px solid rgba(240, 40, 20, 
 
 @font-face {
     font-family: 'raleway';
-    src: url('file:///android_asset/fonts/time/time.ttf');
+    src: url('file:///android_asset/fonts/time/Lora-Regular.ttf');
 }
 
 .andada {
@@ -264,10 +269,15 @@ html.nightMode .highlight_underline {border-bottom: 2px solid rgba(240, 40, 20, 
  }
 
 html.textSizeOne { font-size: 13px !important; }
+html.textSizeOne div{ font-size: 13px !important; }
 html.textSizeTwo { font-size: 15px !important; }
+html.textSizeTwo div{ font-size: 15px !important; }
 html.textSizeThree { font-size: 17px !important; }
+html.textSizeThree div{ font-size: 17px !important; }
 html.textSizeFour { font-size: 19px !important; }
+html.textSizeFour div{ font-size: 19px !important; }
 html.textSizeFive { font-size: 21px !important; }
+html.textSizeFive div{ font-size: 21px !important; }
 
 h1 {
     font-size: 2rem;

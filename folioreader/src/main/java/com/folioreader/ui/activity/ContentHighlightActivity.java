@@ -141,7 +141,7 @@ public class ContentHighlightActivity extends AppCompatActivity {
         // String bookLink = getIntent().getStringExtra(FolioReader.EXTRA_LINK);
         new AlertDialog.Builder(this)
             .setTitle("")
-            .setMessage("Đã hết nội dung miễn phí, vui lòng mua sách tại trang web")
+            .setMessage("Bạn có muốn đọc đầy đủ toàn bộ cuốn sách? Xin vui lòng mua ngay tại đây!")
 
             // Specifying a listener allows you to take an action before dismissing the dialog.
             // The dialog is automatically dismissed when a dialog button is clicked.

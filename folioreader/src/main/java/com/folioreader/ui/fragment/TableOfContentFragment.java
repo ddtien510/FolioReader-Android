@@ -147,6 +147,7 @@ public class TableOfContentFragment extends Fragment implements TOCAdapter.TOCCa
 
     @Override
     public void onTocClicked(int position) {
+        
         TOCLinkWrapper tocLinkWrapper = (TOCLinkWrapper) mTOCAdapter.getItemAt(position);
         Intent intent = new Intent();
         intent.putExtra(SELECTED_CHAPTER_POSITION, tocLinkWrapper.getTocLink().getHref());

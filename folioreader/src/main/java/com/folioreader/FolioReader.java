@@ -54,6 +54,7 @@ public class FolioReader {
     private OnHighlightListener onHighlightListener;
     private ReadLocatorListener readLocatorListener;
     private OnClosedListener onClosedListener;
+    private ReaderCloseListener readerCloseListener;
     private ReadLocator readLocator;
     private String link;
     private String statusTooltip;
@@ -73,6 +74,19 @@ public class FolioReader {
         void onFolioReaderClosed();
     }
 
+    /**
+     * This is use for tracking Reader (on FolioActivity) was close / resume by user
+     * onFolioReaderClosed and other event does not send event immediately in case of user go to background
+     * It will send events right after user resume the app from background.
+     *
+     * So we need another method to track if user is exit book to prev activity or user is reading book but get force exit
+     * This event use for react-native-EpubMbt plugin, help user can resume the book when they are reading book > background > foreground
+     */
+    public interface ReaderCloseListener {
+        void onSaveInstanceState();
+        void onResume();
+    }
+
     private BroadcastReceiver highlightReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -88,7 +102,6 @@ public class FolioReader {
     private BroadcastReceiver readLocatorReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             ReadLocator readLocator =
                     (ReadLocator) intent.getSerializableExtra(FolioReader.EXTRA_READ_LOCATOR);
             if (readLocatorListener != null)
@@ -246,6 +259,15 @@ public class FolioReader {
     public FolioReader setOnClosedListener(OnClosedListener onClosedListener) {
         this.onClosedListener = onClosedListener;
         return singleton;
+    }
+
+    public FolioReader setReaderCloseListener(ReaderCloseListener listener) {
+        this.readerCloseListener = listener;
+        return singleton;
+    }
+
+    public ReaderCloseListener getReaderCloseListener() {
+        return this.readerCloseListener;
     }
 
     public FolioReader setReadLocator(ReadLocator readLocator) {

@@ -36,9 +36,9 @@
                     android:id="@+id/btn_home"
                     android:layout_alignParentLeft="true"
                     android:layout_centerInParent="true"
-                    app:srcCompat="@drawable/ic_back_grey" 
-                    android:layout_width="12dp"
-                    android:layout_height="19dp"
+                    app:srcCompat="@drawable/ic_back_24h" 
+                    android:layout_width="40dp"
+                    android:layout_height="39dp"
                     android:scaleType="fitXY"
                 />
         </androidx.appcompat.widget.Toolbar>

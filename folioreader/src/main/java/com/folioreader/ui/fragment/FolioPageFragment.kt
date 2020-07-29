@@ -115,7 +115,7 @@ class FolioPageFragment : Fragment(),
     private var loadingView: LoadingView? = null
     private var mScrollSeekbar: VerticalSeekbar? = null
     var mWebview: FolioWebView? = null
-    private var webViewPager: WebViewPager? = null
+    var webViewPager: WebViewPager? = null
     private var mPagesLeftTextView: TextView? = null
     private var mMinutesLeftTextView: TextView? = null
     private var mActivityCallback: FolioActivityCallback? = null
@@ -197,15 +197,9 @@ class FolioPageFragment : Fragment(),
         initAnimations()
         initWebView()
         updatePagesLeftTextBg()
-        // mRootView2 = getLayoutInflater().inflate(R.layout.login, container, false)
 
 
-        // val btn:ImageView = mRootView2!!.findViewById(R.id.btn_tooltip1)
 
-
-        // btn.setOnClickListener {
-        //     Log.v("test", "======>")
-        // }
         return mRootView
     }
 
@@ -270,7 +264,7 @@ class FolioPageFragment : Fragment(),
     fun reload(reloadDataEvent: ReloadDataEvent) {
 
         if (isCurrentFragment)
-            getLastReadLocator()
+            load()
 
         if (isAdded) {
             mWebview!!.dismissPopupWindow()
@@ -361,15 +355,17 @@ class FolioPageFragment : Fragment(),
 
     fun scrollToLast() {
         val isPageLoading = loadingView == null || loadingView!!.visibility == View.VISIBLE
-        // try {
-        //     val pageIndex = mActivityCallback!!.currentChapterIndex
-        //     if (pageIndex == 2 && !mIsShowRemindPurchase && mLink!!.length > 0) {
-        //       mIsShowRemindPurchase = true
-        //       // showRemindPurchase()
-        //     }
-        // } catch (e: Exception) {
-        //     Log.e(LOG_TAG, "shouldInterceptRequest failed", e)
-        // }
+        try {
+            // deprecated
+            // val pageIndex = mActivityCallback!!.currentChapterIndex
+            // Log.v(LOG_TAG, "-> pageIndex count -> ${pageIndex}")
+            // if (pageIndex == 2 && !mIsShowRemindPurchase && mLink!!.length > 0) {
+            //   mIsShowRemindPurchase = true
+            //   showRemindPurchase()
+            // }
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "shouldInterceptRequest failed", e)
+        }
         
         if (!isPageLoading) {
             loadingView!!.show()
@@ -377,9 +373,13 @@ class FolioPageFragment : Fragment(),
         }
     }
 
-    fun showRemindPurchase() {
+    fun showRemindPurchase(isLastPage:Boolean = false ) {
             val dialogBuilder = AlertDialog.Builder(getActivity())
-            dialogBuilder.setMessage("Bạn có muốn đọc đầy đủ toàn bộ cuốn sách? Xin vui lòng mua ngay tại đây!")
+            var message = "Bạn có muốn đọc đầy đủ toàn bộ cuốn sách? Xin vui lòng mua ngay tại đây!";
+            if (isLastPage) {
+                message = "Các chương đọc miễn phí đã hết. Bạn có muốn đọc đầy đủ toàn bộ cuốn sách? Xin vui lòng mua ngay tại đây!"
+            }
+            dialogBuilder.setMessage(message)
                     // if the dialog is cancelable
                     .setCancelable(true)
                     .setPositiveButton("Mua ngay", DialogInterface.OnClickListener {
@@ -505,6 +505,7 @@ class FolioPageFragment : Fragment(),
     private val webViewClient = object : WebViewClient() {
 
         override fun onPageFinished(view: WebView, url: String) {
+
             mWebview!!.loadUrl("javascript:checkCompatMode()")
             mWebview!!.loadUrl("javascript:alert(getReadingTime())")
 
@@ -698,8 +699,20 @@ class FolioPageFragment : Fragment(),
         mediaController!!.stop()
         //TODO save last media overlay item
 
-        if (isCurrentFragment)
-            getLastReadLocator()
+       
+    }
+
+    fun load() {
+        Log.v(LOG_TAG, "-> getLastReadLocator2 -> " + spineItem.href!!)
+        try {
+            synchronized(this) {
+                mWebview!!.loadUrl(getString(R.string.callComputeLastReadCfi2))
+                (this as java.lang.Object).wait(5000)
+            }
+        } catch (e: InterruptedException) {
+            Log.e(LOG_TAG, "-> ", e)
+        }
+
     }
 
     fun getLastReadLocator(): ReadLocator? {
@@ -717,7 +730,7 @@ class FolioPageFragment : Fragment(),
     }
 
     @JavascriptInterface
-    fun storeLastReadCfi(cfi: String) {
+    fun storeLastReadCfi(cfi: String, noCallback: Boolean) {
 
         synchronized(this) {
             var href = spineItem.href
@@ -727,9 +740,11 @@ class FolioPageFragment : Fragment(),
             locations.cfi = cfi
             lastReadLocator = ReadLocator(mBookId!!, href, created, locations)
 
-            val intent = Intent(FolioReader.ACTION_SAVE_READ_LOCATOR)
-            intent.putExtra(FolioReader.EXTRA_READ_LOCATOR, lastReadLocator as Parcelable?)
-            LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+            if (!noCallback) {
+                val intent = Intent(FolioReader.ACTION_SAVE_READ_LOCATOR)
+                intent.putExtra(FolioReader.EXTRA_READ_LOCATOR, lastReadLocator as Parcelable?)
+                LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+            }
 
             (this as java.lang.Object).notify()
         }
@@ -795,15 +810,8 @@ class FolioPageFragment : Fragment(),
                 pagesRemainingStrFormat, pagesRemaining
             )
 
-               Log.v(LOG_TAG, "-> chap -> ${this.popupShowed}")
-
-            if (mActivityCallback!!.currentChapterIndex > 0 && pagesRemaining == 1) {
-               Log.v(LOG_TAG, "-> pagesRemaining -> ${pagesRemaining}")
-               this.popupShowed = true
-               popupShowed = true
-            } 
             
-
+            
             val minutesRemaining = Math.ceil((pagesRemaining * mTotalMinutes).toDouble() / totalPages).toInt()
             val minutesRemainingStr: String
 
@@ -963,7 +971,9 @@ class FolioPageFragment : Fragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-
+         if (isCurrentFragment)
+            getLastReadLocator()
+            
         if (isCurrentFragment) {
             if (outState != null)
                 outState!!.putSerializable(BUNDLE_READ_LOCATOR_CONFIG_CHANGE, lastReadLocator)

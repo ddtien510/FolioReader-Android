@@ -112,6 +112,7 @@
 
     <!-- JS Calls -->
     <string name="callComputeLastReadCfi" translatable="false">javascript:computeLastReadCfi()</string>
+    <string name="callComputeLastReadCfi2" translatable="false">javascript:computeLastReadCfi2()</string>
     <string name="callScrollToCfi" translatable="false">javascript:scrollToCfi(\"%s\")</string>
     <string name="callHighlightSearchLocator" translatable="false">javascript:highlightSearchLocator(\"%s\")</string>
     <string name="callClearSelection" translatable="false">javascript:clearSelection()</string>

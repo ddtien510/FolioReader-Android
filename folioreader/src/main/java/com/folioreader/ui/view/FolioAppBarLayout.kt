@@ -21,7 +21,7 @@ class FolioAppBarLayout : AppBarLayout {
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
 
         ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
-            Log.v(LOG_TAG, "-> onApplyWindowInsets")
+            // Log.v(LOG_TAG, "-> onApplyWindowInsets")
             // For API level 20 and above
 
             this.insets = Rect(

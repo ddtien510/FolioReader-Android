@@ -75,6 +75,7 @@ import org.readium.r2.streamer.server.Server
 import java.lang.ref.WeakReference
 import android.widget.ImageView
 import android.graphics.Color;
+import com.folioreader.ui.view.*
 
 class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControllerCallback,
     View.OnSystemUiVisibilityChangeListener {
@@ -161,6 +162,23 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         }
     }
 
+    /*
+on go background => Save state
+07-14 18:32:54.972 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivityPaused: com.folioreader.ui.activity.FolioActivity
+07-14 18:32:55.811 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivitySaveInstanceState: com.folioreader.ui.activity.FolioActivity
+07-14 18:32:55.812 24028-24028/com.money24h.vn V/FolioActivity: -> onSaveInstanceState
+07-14 18:32:55.813 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivityStopped: com.folioreader.ui.activity.FolioActivity
+07-14 18:32:55.833 24028-24028/com.money24h.vn V/FolioActivity: -> onStop
+
+on press back ==> Likely to destroy
+07-14 18:33:31.827 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivityPaused: com.folioreader.ui.activity.FolioActivity
+07-14 18:33:31.842 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivityStarted: MainActivity
+07-14 18:33:31.907 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivityResumed: MainActivity
+07-14 18:33:32.411 24028-24028/com.money24h.vn D/PDYLifeCycleHandler: onActivityStopped: com.folioreader.ui.activity.FolioActivity
+07-14 18:33:32.414 24028-24028/com.money24h.vn V/FolioActivity: -> onStop
+
+     */
+
     val statusBarHeight: Int
         get() {
             var result = 0
@@ -231,7 +249,12 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     override fun onResume() {
         super.onResume()
         Log.v(LOG_TAG, "-> onResume")
+        hideSystemUI()
         topActivity = true
+
+        if (FolioReader.get().readerCloseListener != null) {
+            FolioReader.get().readerCloseListener.onResume()
+        }
 
         val action = intent.action
         if (action != null && action == FolioReader.ACTION_CLOSE_FOLIOREADER) {
@@ -277,15 +300,15 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             searchQuery = savedInstanceState.getCharSequence(SearchActivity.BUNDLE_SAVE_SEARCH_QUERY)
         }
 
-        mBookId = intent.getStringExtra(FolioReader.EXTRA_BOOK_ID)
-        mLink = intent.getStringExtra(FolioReader.EXTRA_LINK)
-        mStatusTooltip = intent.getStringExtra(FolioReader.EXTRA_STATUS_TOOLTIP)
+        mBookId = intent!!.getStringExtra(FolioReader.EXTRA_BOOK_ID)
+        mLink = intent!!.getStringExtra(FolioReader.EXTRA_LINK)
+        mStatusTooltip = intent!!.getStringExtra(FolioReader.EXTRA_STATUS_TOOLTIP)
 
-        mEpubSourceType = intent.extras!!.getSerializable(FolioActivity.INTENT_EPUB_SOURCE_TYPE) as EpubSourceType
+        mEpubSourceType = intent!!.extras!!.getSerializable(FolioActivity.INTENT_EPUB_SOURCE_TYPE) as EpubSourceType
         if (mEpubSourceType == EpubSourceType.RAW) {
-            mEpubRawId = intent.extras!!.getInt(FolioActivity.INTENT_EPUB_SOURCE_PATH)
+            mEpubRawId = intent!!.extras!!.getInt(FolioActivity.INTENT_EPUB_SOURCE_PATH)
         } else {
-            mEpubFilePath = intent.extras!!
+            mEpubFilePath = intent!!.extras!!
                 .getString(FolioActivity.INTENT_EPUB_SOURCE_PATH)
         }
 
@@ -415,7 +438,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         if (itemId == android.R.id.home) {
             Log.v(LOG_TAG, "-> onOptionsItemSelected -> drawer")
             startContentHighlightActivity()
-            hideSystemUI()
+            // hideSystemUI()
             return true
 
         } else if (itemId == R.id.itemSearch) {
@@ -593,8 +616,8 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         Log.v(LOG_TAG, "-> onDirectionChange")
 
         var folioPageFragment: FolioPageFragment? = currentFragment ?: return
-        entryReadLocator = folioPageFragment!!.getLastReadLocator()
-        val searchLocatorVisible = folioPageFragment.searchLocatorVisible
+        // entryReadLocator = folioPageFragment!!.getLastReadLocator()
+        val searchLocatorVisible = folioPageFragment!!.searchLocatorVisible
 
         direction = newDirection
 
@@ -613,7 +636,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     }
 
     private fun initDistractionFreeMode(savedInstanceState: Bundle?) {
-        Log.v(LOG_TAG, "-> initDistractionFreeMode")
+        // Log.v(LOG_TAG, "-> initDistractionFreeMode")
 
         window.decorView.setOnSystemUiVisibilityChangeListener(this)
 
@@ -626,7 +649,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        Log.v(LOG_TAG, "-> onPostCreate")
+        // Log.v(LOG_TAG, "-> onPostCreate")
 
         if (distractionFreeMode) {
             handler!!.post { hideSystemUI() }
@@ -737,10 +760,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     }
 
     override fun onSystemUiVisibilityChange(visibility: Int) {
-        Log.v(LOG_TAG, "-> onSystemUiVisibilityChange -> visibility = $visibility")
+        // Log.v(LOG_TAG, "-> onSystemUiVisibilityChange -> visibility = $visibility")
 
         distractionFreeMode = visibility != View.SYSTEM_UI_FLAG_VISIBLE
-        Log.v(LOG_TAG, "-> distractionFreeMode = $distractionFreeMode")
+        // Log.v(LOG_TAG, "-> distractionFreeMode = $distractionFreeMode")
 
         if (actionBar != null) {
             if (distractionFreeMode) {
@@ -761,8 +784,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     }
 
     private fun showSystemUI() {
-        Log.v(LOG_TAG, "-> showSystemUI")
-
+        // Log.v(LOG_TAG, "-> showSystemUI")
+        if (!distractionFreeMode) {
+            return
+        }   
         if (Build.VERSION.SDK_INT >= 16) {
             val decorView = window.decorView
             decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -777,7 +802,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     }
 
     override fun hideSystemUI() {
-        Log.v(LOG_TAG, "-> hideSystemUI")
+        // Log.v(LOG_TAG, "-> hideSystemUI")
         if (distractionFreeMode) {
             return
         }
@@ -818,9 +843,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
      * @return true if href is of EPUB or false if other link
      */
     override fun goToChapter(href: String): Boolean {
-
+        // Log.v(LOG_TAG, "href -> " + href)
         for (link in spine!!) {
             if (href.contains(link.href!!)) {
+
                 currentChapterIndex = spine!!.indexOf(link)
                 mFolioPageViewPager!!.currentItem = currentChapterIndex
                 val folioPageFragment = currentFragment
@@ -829,6 +855,13 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
                 return true
             }
         }
+
+        val linkCover =  "/OEBPS/Text/Section0001.xhtml"
+        currentChapterIndex = 0
+        mFolioPageViewPager!!.currentItem = currentChapterIndex
+        val folioPageFragment = currentFragment
+        folioPageFragment!!.scrollToFirst()
+        folioPageFragment.scrollToAnchorId(linkCover)
         return false
     }
 
@@ -877,6 +910,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.v(LOG_TAG, "-> onDestroy -> ")
 
         if (outState != null)
             outState!!.putSerializable(BUNDLE_READ_LOCATOR_CONFIG_CHANGE, lastReadLocator)
@@ -915,7 +949,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                Log.v(LOG_TAG, "-> onPageSelected -> DirectionalViewpager -> position = $position")
+                // Log.v(LOG_TAG, "-> onPageSelected -> DirectionalViewpager -> position = $position")
 
                 EventBus.getDefault().post(
                     MediaOverlayPlayPauseEvent(
@@ -947,6 +981,29 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
                         folioPageFragment.scrollToFirst()
                         if (folioPageFragment.mWebview != null)
                             folioPageFragment.mWebview!!.dismissPopupWindow()
+                    } else {
+                        // last chapter
+                        if(direction === Config.Direction.HORIZONTAL){
+                            // is horizontal scroll 
+                            folioPageFragment = mFolioPageFragmentAdapter!!.getItem(position) as FolioPageFragment?
+
+                            var totalPageLength = folioPageFragment?.webViewPager?.adapter?.count
+
+                            val lastPageIndex = if (totalPageLength != null) totalPageLength.minus(1) else 999
+                            val currentIndex = folioPageFragment?.webViewPager?.currentItem
+                            if (currentIndex === lastPageIndex) {
+                                // Show remind purchase in last page in last chapter.
+                                folioPageFragment?.showRemindPurchase(true)
+                            }
+                        } else {
+                            // is vertical scroll
+                            folioPageFragment = mFolioPageFragmentAdapter!!.getItem(position) as FolioPageFragment?
+                            var webView = folioPageFragment?.mWebview?.isReachEnd as Boolean;
+                            if (webView) {
+                                // is last webview reach end.
+                                folioPageFragment?.showRemindPurchase(true)
+                            }
+                        }
                     }
                 }
             }
@@ -1026,6 +1083,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         outState.putBoolean(BUNDLE_DISTRACTION_FREE_MODE, distractionFreeMode)
         outState.putBundle(SearchAdapter.DATA_BUNDLE, searchAdapterDataBundle)
         outState.putCharSequence(SearchActivity.BUNDLE_SAVE_SEARCH_QUERY, searchQuery)
+
+        if (FolioReader.get().readerCloseListener != null) {
+            FolioReader.get().readerCloseListener.onSaveInstanceState()
+        }
     }
 
     override fun storeLastReadLocator(lastReadLocator: ReadLocator) {
